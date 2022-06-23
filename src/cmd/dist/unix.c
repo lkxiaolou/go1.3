@@ -96,7 +96,7 @@ xgetenv(Buf *b, char *name)
 	char *p;
 	
 	breset(b);
-	p = getenv(name);
+	p = getenv(name); // c标准库函数
 	if(p != NULL)
 		bwritestr(b, p);
 }

@@ -14,7 +14,7 @@ static struct {
 	void (*f)(int, char**);
 } cmdtab[] = {
 	{"banner", cmdbanner},
-	{"bootstrap", cmdbootstrap},
+	{"bootstrap", cmdbootstrap}, // build.c
 	{"clean", cmdclean},
 	{"env", cmdenv},
 	{"install", cmdinstall},

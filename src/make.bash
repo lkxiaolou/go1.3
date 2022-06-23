@@ -5,7 +5,7 @@
 
 # Environment variables that control make.bash:
 #
-# GOROOT_FINAL: The expected final Go root, baked into binaries.
+# GOROOT_FINAL: The expected final Go root, baked into binaries（roshi: 在二进制文件内）.
 # The default is the location of the Go tree during the build.
 #
 # GOHOSTARCH: The architecture for host tools (compilers and
@@ -113,8 +113,11 @@ rm -f ./pkg/runtime/runtime_defs.go
 echo '# Building C bootstrap tool.'
 echo cmd/dist
 export GOROOT="$(cd .. && pwd)"
+echo "roshi debug: GOROO=$GOROOT"
 GOROOT_FINAL="${GOROOT_FINAL:-$GOROOT}"
+echo "roshi debug: GOROOT_FINAL=$GOROOT_FINAL"
 DEFGOROOT='-DGOROOT_FINAL="'"$GOROOT_FINAL"'"'
+echo "roshi debug: DEFGOROOT=$DEFGOROOT"
 
 mflag=""
 case "$GOHOSTARCH" in
@@ -129,6 +132,10 @@ fi
 if [ -z "$CC" -a -z "$(type -t gcc)" -a -n "$(type -t clang)" ]; then
 	export CC=clang CXX=clang++
 fi
+
+echo "roshi debug: ${CC:-gcc} $mflag -O2 -Wall -Werror -o cmd/dist/dist -Icmd/dist "$DEFGOROOT" cmd/dist/*.c"
+# roshi debug: gcc  -mmacosx-version-min=10.6 -O2 -Wall -Werror -o cmd/dist/dist -Icmd/dist -DGOROOT_FINAL="/Users/didi/IdeaProjects/src/github.com/go1.3" cmd/dist/*.c
+
 ${CC:-gcc} $mflag -O2 -Wall -Werror -o cmd/dist/dist -Icmd/dist "$DEFGOROOT" cmd/dist/*.c
 
 # -e doesn't propagate out of eval, so check success by hand.
@@ -155,6 +162,9 @@ if [ "$1" = "--no-clean" ]; then
 	buildall=""
 	shift
 fi
+
+echo "roshi debug: ./cmd/dist/dist bootstrap $buildall $GO_DISTFLAGS -v"
+# roshi debug: ./cmd/dist/dist bootstrap -a  -v
 ./cmd/dist/dist bootstrap $buildall $GO_DISTFLAGS -v # builds go_bootstrap
 # Delay move of dist tool to now, because bootstrap may clear tool directory.
 mv cmd/dist/dist "$GOTOOLDIR"/dist

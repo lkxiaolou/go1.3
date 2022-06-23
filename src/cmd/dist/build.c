@@ -85,11 +85,11 @@ init(void)
 {
 	char *p;
 	int i;
-	Buf b;
+	Buf b; // A Buf is a byte buffer, like Go's []byte. a.h
 
-	binit(&b);
+	binit(&b); // buf.c
 
-	xgetenv(&b, "GOROOT");
+	xgetenv(&b, "GOROOT"); // unix.c
 	if(b.len > 0) {
 		// if not "/", then strip trailing path separator
 		if(b.len >= 2 && b.p[b.len - 1] == slash[0])
@@ -640,7 +640,7 @@ install(char *dir)
 	char *name, *p, *elem, *prefix, *exe;
 	bool islib, ispkg, isgo, stale, ispackcmd;
 	Buf b, b1, path;
-	Vec compile, files, link, go, missing, clean, lib, extra;
+	Vec compile, files, link, go, missing, clean, lib, extra; // A Vec is a string vector, like Go's []string. a.h
 	Time ttarg, t;
 	int i, j, k, n, doclean, targ;
 
